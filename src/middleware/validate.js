@@ -18,7 +18,8 @@ function clean(input, schema, prefix = '') {
     let v = source[field];
 
     if (isBlank(v)) {
-      if (rule.required) errors.push(`${label} is required`);
+      if (rule.nullable && (v === null || (typeof v === 'string' && v.trim() === ''))) out[field] = null;
+      else if (rule.required) errors.push(`${label} is required`);
       else if (rule.default !== undefined) out[field] = rule.default;
       continue;
     }

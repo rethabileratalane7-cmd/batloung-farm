@@ -38,6 +38,7 @@ CREATE TABLE fruits (
   fruit_id    INT UNSIGNED NOT NULL AUTO_INCREMENT,
   fruit_name  VARCHAR(60)  NOT NULL,
   description VARCHAR(255) NULL,
+  category    VARCHAR(60)  NULL DEFAULT NULL,
   status      ENUM('ACTIVE','INACTIVE') NOT NULL DEFAULT 'ACTIVE',
   PRIMARY KEY (fruit_id),
   UNIQUE KEY uq_fruit_name (fruit_name)

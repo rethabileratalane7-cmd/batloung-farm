@@ -18,8 +18,8 @@ exports.findById = async (id) => {
 exports.create = (d) =>
   withTransaction(async (conn) => {
     const [r] = await conn.query(
-      'INSERT INTO fruits (fruit_name, description, status) VALUES (?, ?, ?)',
-      [d.fruit_name, d.description || null, d.status || 'ACTIVE']
+      'INSERT INTO fruits (fruit_name, description, category, status) VALUES (?, ?, ?, ?)',
+      [d.fruit_name, d.description || null, d.category || null, d.status || 'ACTIVE']
     );
     for (const size of SIZES) {
       await conn.query(

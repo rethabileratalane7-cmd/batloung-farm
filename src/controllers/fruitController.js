@@ -8,6 +8,7 @@ const { FRUIT_STATUS } = require('../config/constants');
 const schema = {
   fruit_name: { type: 'string', required: true, max: 60 },
   description: { type: 'string', max: 255 },
+  category: { type: 'string', max: 60, nullable: true },
   status: { type: 'enum', values: FRUIT_STATUS, default: 'ACTIVE' },
 };
 

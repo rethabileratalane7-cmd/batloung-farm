@@ -35,6 +35,17 @@ exports.get = asyncHandler(async (req, res) => {
 exports.create = asyncHandler(async (req, res) => {
   const h = clean(req.body, header);
   const items = cleanItems(req.body && req.body.items, itemSchema);
+  const largeQuantities = new Map();
+  for (const item of items) {
+    if (item.packaging_size !== 'LARGE') continue;
+    largeQuantities.set(item.fruit_id, (largeQuantities.get(item.fruit_id) || 0) + item.quantity);
+  }
+  const largeLimitErrors = [...largeQuantities]
+    .filter(([, quantity]) => quantity > 8)
+    .map(([fruit_id, requested]) => ({ fruit_id, requested, maximum: 8 }));
+  if (largeLimitErrors.length) {
+    throw new AppError(400, 'Large boxes are limited to 8 per fruit in a sale.', 'LARGE_BOX_LIMIT', largeLimitErrors);
+  }
   const payment = req.body && req.body.payment ? clean(req.body.payment, paymentSchema, 'payment.') : undefined;
   const saleId = await model.record({ ...h, items, payment });
   res.status(201).json({
